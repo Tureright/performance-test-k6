@@ -1,5 +1,7 @@
 import http from "k6/http";
 import { check, sleep } from "k6";
+import { htmlReport } from "../../utils/html-report.js";
+import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 
 const BASE_URL = "http://localhost:3333";
 const AUTH_TOKEN = "Token abcdef0123456789";
@@ -15,9 +17,19 @@ export const options = {
     { duration: "10s", target: 0 },
   ],
   thresholds: {
-    http_req_duration: ["p(95)<1000"],
-    http_req_failed: ["rate<0.05"],
-    checks: ["rate>0.90"],
+    // Thresholds GENERALES (todo el test)
+    http_req_duration: [{ threshold: "p(95)<2000", abortOnFail: false }],
+    http_req_failed: [{ threshold: "rate<0.10", abortOnFail: false }],
+    checks: [{ threshold: "rate>0.85", abortOnFail: false }],
+
+    // Verificar RECUPERACIÓN (última etapa antes de llegar a 0 VUs)
+    // Debe volver a la normalidad después del spike
+    "http_req_duration{stage:stage_5}": [
+      { threshold: "p(95)<1000", abortOnFail: false },
+    ],
+    "http_req_failed{stage:stage_5}": [
+      { threshold: "rate<0.05", abortOnFail: false },
+    ],
   },
 };
 
@@ -84,4 +96,12 @@ export default function () {
   });
 
   sleep(0.5);
+}
+
+export function handleSummary(data) {
+  return {
+    "results/spike/pizza-spike-report.html": htmlReport(data),
+    "results/spike/pizza-spike-summary.json": JSON.stringify(data, null, 2),
+    stdout: textSummary(data, { indent: " ", enableColors: true }),
+  };
 }

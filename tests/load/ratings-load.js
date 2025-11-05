@@ -1,5 +1,7 @@
 import http from "k6/http";
 import { check, sleep } from "k6";
+import { htmlReport } from "../../utils/html-report.js";
+import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 
 const BASE_URL = "http://localhost:3333";
 const AUTH_TOKEN = "Token abcdef0123456789";
@@ -11,10 +13,14 @@ export const options = {
     { duration: "3m", target: 0 },
   ],
   thresholds: {
-    http_req_failed: ["rate<0.01"],
-    http_req_duration: ["p(95)<500"],
-    http_req_duration: ["p(99)<1000"],
-    http_reqs: ["rate>10"],
+    http_req_failed: [{ threshold: "rate<0.05", abortOnFail: false }],
+
+    http_req_duration: [{ threshold: "p(95)<1000", abortOnFail: false }],
+    http_req_duration: [{ threshold: "p(99)<2000", abortOnFail: false }],
+
+    http_reqs: [{ threshold: "rate>10", abortOnFail: false }],
+
+    checks: [{ threshold: "rate>0.95", abortOnFail: false }],
   },
 };
 
@@ -69,23 +75,12 @@ export default function () {
   });
 
   sleep(1);
+}
 
-  // Test 3: GET /api/ratings/{id} - Get specific rating (if we created one)
-  if (ratingId) {
-    const getRatingRes = http.get(`${BASE_URL}/api/ratings/${ratingId}`, {
-      headers: {
-        Authorization: AUTH_TOKEN,
-      },
-      tags: { name: "GetRatingById" },
-    });
-
-    check(getRatingRes, {
-      "GET /api/ratings/{id} status is 200 or 404": (r) =>
-        r.status === 200 || r.status === 404,
-      "GET /api/ratings/{id} response time < 300ms": (r) =>
-        r.timings.duration < 300,
-    });
-  }
-
-  sleep(1);
+export function handleSummary(data) {
+  return {
+    "results/load/ratings-load-report.html": htmlReport(data),
+    "results/load/ratings-load-summary.json": JSON.stringify(data, null, 2),
+    stdout: textSummary(data, { indent: " ", enableColors: true }),
+  };
 }

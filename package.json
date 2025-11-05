@@ -1,0 +1,52 @@
+{
+  "name": "performance-test-k6",
+  "version": "1.0.0",
+  "description": "Performance tests for quickpizza",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test:pizza-smoke": "k6 run tests/smoke/pizza-smoke.js",
+    "test:ratings-smoke": "k6 run tests/smoke/ratings-smoke.js",
+    "test:smoke": "npm run test:pizza-smoke && npm run test:ratings-smoke",
+    
+    "test:pizza-load": "k6 run tests/load/pizza-load.js",
+    "test:ratings-load": "k6 run tests/load/ratings-load.js",
+    "test:load": "npm run test:pizza-load && npm run test:ratings-load",
+    
+    "test:pizza-stress": "k6 run tests/stress/pizza-stress.js",
+    "test:ratings-stress": "k6 run tests/stress/ratings-stress.js",
+    "test:stress": "npm run test:pizza-stress && npm run test:ratings-stress",
+    
+    "test:pizza-spike": "k6 run tests/spike/pizza-spike.js",
+    "test:ratings-spike": "k6 run tests/spike/ratings-spike.js",
+    "test:spike": "npm run test:pizza-spike && npm run test:ratings-spike",
+    
+    "test:pizza-soak": "k6 run tests/soak/pizza-soak.js",
+    "test:ratings-soak": "k6 run tests/soak/ratings-soak.js",
+    "test:soak": "npm run test:pizza-soak && npm run test:ratings-soak",
+    
+    "test:all": "npm run test:smoke && npm run test:load && npm run test:stress && npm run test:spike && npm run test:soak && npm run dashboard",
+    
+    "dashboard": "node scripts/generate-dashboard.js",
+    "open:dashboard": "start results/index.html",
+    
+    "open:smoke": "start results/smoke/pizza-smoke-report.html",
+    "open:load": "start results/load/pizza-load-report.html",
+    "open:stress": "start results/stress/pizza-stress-report.html",
+    "open:spike": "start results/spike/pizza-spike-report.html",
+    "open:soak": "start results/soak/pizza-soak-report.html"
+  },
+  "keywords": [
+    "k6",
+    "performance",
+    "load-testing",
+    "quickpizza",
+    "grafana-cloud"
+  ],
+  "author": "Santiago Fajardo",
+  "license": "ISC",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

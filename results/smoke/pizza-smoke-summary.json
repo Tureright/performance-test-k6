@@ -1,0 +1,283 @@
+{
+  "options": {
+    "summaryTrendStats": [
+      "avg",
+      "min",
+      "med",
+      "max",
+      "p(90)",
+      "p(95)"
+    ],
+    "summaryTimeUnit": "",
+    "noColor": false
+  },
+  "state": {
+    "isStdOutTTY": true,
+    "isStdErrTTY": true,
+    "testRunDurationMs": 18572.2424
+  },
+  "metrics": {
+    "vus": {
+      "type": "gauge",
+      "contains": "default",
+      "values": {
+        "max": 5,
+        "value": 2,
+        "min": 2
+      }
+    },
+    "http_req_duration{expected_response:true}": {
+      "contains": "time",
+      "values": {
+        "max": 338.2398,
+        "p(90)": 103.90394000000005,
+        "p(95)": 179.0239399999999,
+        "avg": 29.717121000000006,
+        "min": 0.5425,
+        "med": 1.82495
+      },
+      "type": "trend"
+    },
+    "http_req_waiting": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "max": 338.2398,
+        "p(90)": 103.90394000000005,
+        "p(95)": 179.0239399999999,
+        "avg": 29.689055000000007,
+        "min": 0.519,
+        "med": 1.82395
+      }
+    },
+    "http_req_duration": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 29.717121000000006,
+        "min": 0.5425,
+        "med": 1.82495,
+        "max": 338.2398,
+        "p(90)": 103.90394000000005,
+        "p(95)": 179.0239399999999
+      },
+      "thresholds": {
+        "p(99)<1000": {
+          "ok": true
+        }
+      }
+    },
+    "vus_max": {
+      "type": "gauge",
+      "contains": "default",
+      "values": {
+        "max": 5,
+        "value": 5,
+        "min": 5
+      }
+    },
+    "http_reqs": {
+      "type": "counter",
+      "contains": "default",
+      "values": {
+        "count": 100,
+        "rate": 5.384379432824978
+      }
+    },
+    "http_req_sending": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "med": 0,
+        "max": 0.5213,
+        "p(90)": 0,
+        "p(95)": 0,
+        "avg": 0.006614,
+        "min": 0
+      }
+    },
+    "iterations": {
+      "type": "counter",
+      "contains": "default",
+      "values": {
+        "count": 25,
+        "rate": 1.3460948582062444
+      }
+    },
+    "http_req_blocked": {
+      "contains": "time",
+      "values": {
+        "p(95)": 0.05417999999999692,
+        "avg": 0.05417999999999999,
+        "min": 0,
+        "med": 0,
+        "max": 1.0836,
+        "p(90)": 0
+      },
+      "type": "trend"
+    },
+    "http_req_connecting": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 0.0218,
+        "min": 0,
+        "med": 0,
+        "max": 0.545,
+        "p(90)": 0,
+        "p(95)": 0
+      }
+    },
+    "data_received": {
+      "type": "counter",
+      "contains": "data",
+      "values": {
+        "count": 90083,
+        "rate": 4850.410524471725
+      }
+    },
+    "http_req_receiving": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "med": 0,
+        "max": 0.9999,
+        "p(90)": 0,
+        "p(95)": 0.0023599999999998657,
+        "avg": 0.021452,
+        "min": 0
+      }
+    },
+    "http_req_tls_handshaking": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 0,
+        "min": 0,
+        "med": 0,
+        "max": 0,
+        "p(90)": 0,
+        "p(95)": 0
+      }
+    },
+    "data_sent": {
+      "type": "counter",
+      "contains": "data",
+      "values": {
+        "count": 17575,
+        "rate": 946.3046853189898
+      }
+    },
+    "http_req_failed": {
+      "type": "rate",
+      "contains": "default",
+      "values": {
+        "rate": 0,
+        "passes": 0,
+        "fails": 100
+      },
+      "thresholds": {
+        "rate<0.01": {
+          "ok": true
+        }
+      }
+    },
+    "checks": {
+      "type": "rate",
+      "contains": "default",
+      "values": {
+        "fails": 0,
+        "rate": 1,
+        "passes": 225
+      },
+      "thresholds": {
+        "rate>0.99": {
+          "ok": true
+        }
+      }
+    },
+    "iteration_duration": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "med": 3599.7353,
+        "max": 3847.2332,
+        "p(90)": 3771.46792,
+        "p(95)": 3779.82044,
+        "avg": 3621.49628,
+        "min": 3517.68
+      }
+    }
+  },
+  "root_group": {
+    "path": "",
+    "id": "d41d8cd98f00b204e9800998ecf8427e",
+    "groups": [],
+    "checks": [
+        {
+          "passes": 25,
+          "fails": 0,
+          "name": "POST /api/pizza status is 200",
+          "path": "::POST /api/pizza status is 200",
+          "id": "bedb764c790f265884870844062190d4"
+        },
+        {
+          "path": "::POST /api/pizza has pizza name",
+          "id": "61db892da45c538adf99aaed5b614034",
+          "passes": 25,
+          "fails": 0,
+          "name": "POST /api/pizza has pizza name"
+        },
+        {
+          "name": "POST /api/pizza has ingredients",
+          "path": "::POST /api/pizza has ingredients",
+          "id": "40cf123da0499910367ac46fae4bfc81",
+          "passes": 25,
+          "fails": 0
+        },
+        {
+          "name": "GET /api/ingredients/topping status is 200",
+          "path": "::GET /api/ingredients/topping status is 200",
+          "id": "f68255ff4747f9c0d3a451ddf3f4ded1",
+          "passes": 25,
+          "fails": 0
+        },
+        {
+          "name": "GET /api/ingredients/topping has ingredients array",
+          "path": "::GET /api/ingredients/topping has ingredients array",
+          "id": "958c72c95eba5c7f72734f95a1fca865",
+          "passes": 25,
+          "fails": 0
+        },
+        {
+          "name": "GET /api/doughs status is 200",
+          "path": "::GET /api/doughs status is 200",
+          "id": "d1a515bd03d531e7db8f2f3ee47552e1",
+          "passes": 25,
+          "fails": 0
+        },
+        {
+          "path": "::GET /api/doughs has doughs array",
+          "id": "f38d22fd856f01fd13d55de2ea88ba58",
+          "passes": 25,
+          "fails": 0,
+          "name": "GET /api/doughs has doughs array"
+        },
+        {
+          "fails": 0,
+          "name": "GET /api/tools status is 200",
+          "path": "::GET /api/tools status is 200",
+          "id": "45a2a0ea583b5cd8cade1be08d726a54",
+          "passes": 25
+        },
+        {
+          "passes": 25,
+          "fails": 0,
+          "name": "GET /api/tools has tools array",
+          "path": "::GET /api/tools has tools array",
+          "id": "97b0a0fc0a84786cdf746b22a6075213"
+        }
+      ],
+    "name": ""
+  }
+}

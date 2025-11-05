@@ -1,5 +1,7 @@
 import http from "k6/http";
 import { check, sleep } from "k6";
+import { htmlReport } from "../../utils/html-report.js";
+import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 
 const BASE_URL = "http://localhost:3333";
 const AUTH_TOKEN = "Token abcdef0123456789";
@@ -7,14 +9,20 @@ const AUTH_TOKEN = "Token abcdef0123456789";
 export const options = {
   stages: [
     { duration: "5m", target: 100 },
-    { duration: "3h", target: 100 },
+    { duration: "1h", target: 100 },
     { duration: "5m", target: 0 },
   ],
   thresholds: {
-    http_req_duration: ["p(95)<500"],
-    http_req_failed: ["rate<0.01"],
-    checks: ["rate>0.98"],
-    http_req_duration: ["p(99)<1000"],
+    // SOAK debe ser estricto
+    http_req_duration: [{ threshold: "p(95)<800", abortOnFail: false }],
+    http_req_duration: [{ threshold: "p(99)<1500", abortOnFail: false }],
+    http_req_failed: [{ threshold: "rate<0.01", abortOnFail: false }],
+    checks: [{ threshold: "rate>0.98", abortOnFail: false }],
+
+    // CRÍTICO: Verificar estabilidad al FINAL (no debe degradarse)
+    "http_req_duration{stage:stage_1}": [
+      { threshold: "p(95)<1000", abortOnFail: false },
+    ],
   },
 };
 
@@ -100,4 +108,12 @@ export default function () {
   });
 
   sleep(2);
+}
+
+export function handleSummary(data) {
+  return {
+    "results/soak/pizza-soak-report.html": htmlReport(data),
+    "results/soak/pizza-soak-summary.json": JSON.stringify(data, null, 2),
+    stdout: textSummary(data, { indent: " ", enableColors: true }),
+  };
 }

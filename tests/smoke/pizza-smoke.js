@@ -1,5 +1,7 @@
 import http from "k6/http";
 import { check, sleep } from "k6";
+import { htmlReport } from "../../utils/html-report.js";
+import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 
 const BASE_URL = "http://localhost:3333";
 const AUTH_TOKEN = "token abcdef0123456789";
@@ -8,8 +10,10 @@ export const options = {
   vus: 5,
   duration: "15s",
   thresholds: {
-    http_req_failed: ["rate<0.01"],
-    http_req_duration: ["p(95)<500"],
+    http_req_failed: [{ threshold: "rate<0.01", abortOnFail: false }],
+    http_req_duration: [{ threshold: "p(95)<500", abortOnFail: false }],
+    http_req_duration: [{ threshold: "p(99)<1000", abortOnFail: false }],
+    checks: [{ threshold: "rate>0.99", abortOnFail: false }],
   },
 };
 
@@ -94,4 +98,12 @@ export default function () {
   });
 
   sleep(1);
+}
+
+export function handleSummary(data) {
+  return {
+    "results/smoke/pizza-smoke-report.html": htmlReport(data),
+    "results/smoke/pizza-smoke-summary.json": JSON.stringify(data, null, 2),
+    stdout: textSummary(data, { indent: " ", enableColors: true }),
+  };
 }

@@ -1,5 +1,7 @@
 import http from "k6/http";
 import { check, sleep } from "k6";
+import { htmlReport } from "../../utils/html-report.js";
+import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 
 const BASE_URL = "http://localhost:3333";
 const AUTH_TOKEN = "Token abcdef0123456789";
@@ -7,6 +9,12 @@ const AUTH_TOKEN = "Token abcdef0123456789";
 export const options = {
   vus: 5,
   duration: "15s",
+  thresholds: {
+    http_req_failed: [{ threshold: "rate<0.01", abortOnFail: false }],
+    http_req_duration: [{ threshold: "p(95)<500", abortOnFail: false }],
+    http_req_duration: [{ threshold: "p(99)<1000", abortOnFail: false }],
+    checks: [{ threshold: "rate>0.99", abortOnFail: false }],
+  },
 };
 
 export default function () {
@@ -26,6 +34,11 @@ export default function () {
       },
     }
   );
+  if (postRatingRes.status !== 201) {
+    console.error(`POST FAILED: Status ${postRatingRes.status}`);
+    console.error(`Body: ${postRatingRes.body}`);
+    console.error(`Sent: ${JSON.stringify(newRating)}`);
+  }
 
   check(postRatingRes, {
     "POST /api/ratings status is 201": (r) => r.status === 201,
@@ -78,4 +91,12 @@ export default function () {
   }
 
   sleep(1);
+}
+
+export function handleSummary(data) {
+  return {
+    "results/smoke/ratings-smoke-report.html": htmlReport(data),
+    "results/smoke/ratings-smoke-summary.json": JSON.stringify(data, null, 2),
+    stdout: textSummary(data, { indent: " ", enableColors: true }),
+  };
 }
