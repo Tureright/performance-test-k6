@@ -119,7 +119,7 @@ Todas las pruebas están configuradas para funcionar tanto en ambiente local com
 Los scripts utilizan la siguiente configuración:
 
 ```javascript
-const BASE_URL = __ENV.BASE_URL || "http://localhost:3333";
+const BASE_URL = "http://localhost:3333";
 ```
 
 ### Ejecutar Pruebas en Ambiente Local
@@ -139,18 +139,6 @@ k6 run tests/spike/spike-test.js
 
 # Soak Test
 k6 run tests/soak/soak-test.js
-```
-
-### Ejecutar Pruebas en Ambiente Desplegado
-
-```bash
-# Smoke Test
-k6 run -e BASE_URL=https://quickpizza.grafana.com tests/smoke/smoke-test.js
-
-# Load Test
-k6 run -e BASE_URL=https://quickpizza.grafana.com tests/load/load-test.js
-
-# Y así sucesivamente...
 ```
 
 ---
