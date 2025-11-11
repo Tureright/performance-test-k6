@@ -88,8 +88,8 @@ export default function () {
 
 export function handleSummary(data) {
   return {
-    "results/spike/ratings-spike-report.html": htmlReport(data),
-    "results/spike/ratings-spike-summary.json": JSON.stringify(data, null, 2),
+    "results/stress/ratings-stress-report.html": htmlReport(data),
+    "results/stress/ratings-stress-summary.json": JSON.stringify(data, null, 2),
     stdout: textSummary(data, { indent: " ", enableColors: true }),
   };
 }
